@@ -82,9 +82,9 @@ Casos de uso que orquestram a lógica de negócio:
 
 #### Web (Apresentação)
 - **Controllers**: Endpoints REST
-    - `GET /cupons/{id}` - Buscar cupom por ID
-    - `POST /cupons` - Criar novo cupom
-    - `DELETE /cupons/{id}` - Deletar cupom
+    - `GET /cupom/{id}` - Buscar cupom por ID
+    - `POST /cupom` - Criar novo cupom
+    - `DELETE /cupom/{id}` - Deletar cupom
 
 - **GlobalExceptionHandler**: Tratamento centralizado de exceções personalizadas
 
