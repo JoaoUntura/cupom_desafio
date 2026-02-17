@@ -120,23 +120,23 @@ class CupomRepositoryTest {
     @Test
     @DisplayName("Deve verificar se cupom existe por código com lock")
     void shouldCheckIfCupomExistsByCodeWithLock() {
-        when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(true);
+        when(cupomRepository.existsByCode("ABC123")).thenReturn(true);
 
-        boolean exists = cupomRepository.existsByCodeWithLock("ABC123");
+        boolean exists = cupomRepository.existsByCode("ABC123");
 
         assertTrue(exists);
-        verify(cupomRepository, times(1)).existsByCodeWithLock("ABC123");
+        verify(cupomRepository, times(1)).existsByCode("ABC123");
     }
 
     @Test
     @DisplayName("Deve retornar false quando cupom não existe por código com lock")
     void shouldReturnFalseWhenCupomDoesNotExistByCodeWithLock() {
-        when(cupomRepository.existsByCodeWithLock("NONEXISTENT")).thenReturn(false);
+        when(cupomRepository.existsByCode("NONEXISTENT")).thenReturn(false);
 
-        boolean exists = cupomRepository.existsByCodeWithLock("NONEXISTENT");
+        boolean exists = cupomRepository.existsByCode("NONEXISTENT");
 
         assertFalse(exists);
-        verify(cupomRepository, times(1)).existsByCodeWithLock("NONEXISTENT");
+        verify(cupomRepository, times(1)).existsByCode("NONEXISTENT");
     }
 
     @Test

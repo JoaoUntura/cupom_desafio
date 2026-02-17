@@ -55,7 +55,7 @@ class CreateCupomUseCaseTest {
         @Test
         @DisplayName("Deve criar cupom com sucesso")
         void shouldCreateCupomSuccessfully() {
-            when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+            when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
 
             Cupom savedCupom = new Cupom(
                     validRequest.code(),
@@ -72,14 +72,14 @@ class CreateCupomUseCaseTest {
 
             assertNotNull(response);
             assertEquals("ABC123", response.code());
-            verify(cupomRepository).existsByCodeWithLock("ABC123");
+            verify(cupomRepository).existsByCode("ABC123");
             verify(cupomRepository).save(any(Cupom.class));
         }
 
         @Test
         @DisplayName("Deve retornar CupomResponse com dados corretos")
         void shouldReturnCupomResponseWithCorrectData() {
-            when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+            when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
 
             Cupom savedCupom = new Cupom(
                     validRequest.code(),
@@ -102,7 +102,7 @@ class CreateCupomUseCaseTest {
         @Test
         @DisplayName("Deve usar lock pessimista para verificar duplicidade")
         void shouldUsePessimisticLockToCheckDuplicates() {
-            when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+            when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
             when(cupomRepository.save(any(Cupom.class))).thenReturn(new Cupom(
                     "ABC123", "Desc", new BigDecimal("10.00"),
                     LocalDateTime.now().plusDays(7), true
@@ -110,7 +110,7 @@ class CreateCupomUseCaseTest {
 
             createUseCase.execute(validRequest);
 
-            verify(cupomRepository).existsByCodeWithLock("ABC123");
+            verify(cupomRepository).existsByCode("ABC123");
         }
 
         @Test
@@ -124,7 +124,7 @@ class CreateCupomUseCaseTest {
                     null
             );
 
-            when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+            when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
 
             ArgumentCaptor<Cupom> cupomCaptor = ArgumentCaptor.forClass(Cupom.class);
             Cupom savedCupom = new Cupom(
@@ -152,7 +152,7 @@ class CreateCupomUseCaseTest {
                     true
             );
 
-            when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+            when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
             when(cupomRepository.save(any(Cupom.class))).thenReturn(new Cupom(
                     "ABC123", "Desc", new BigDecimal("10.00"),
                     LocalDateTime.now().plusDays(7), true
@@ -161,7 +161,7 @@ class CreateCupomUseCaseTest {
             createUseCase.execute(requestWithSpecialChars);
 
             // Verificar que foi normalizado para ABC123
-            verify(cupomRepository).existsByCodeWithLock("ABC123");
+            verify(cupomRepository).existsByCode("ABC123");
         }
 
         @Nested
@@ -171,7 +171,7 @@ class CreateCupomUseCaseTest {
             @Test
             @DisplayName("Deve lançar CodeAlreadyExists quando código existe")
             void shouldThrowCodeAlreadyExistsWhenCodeExists() {
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(true);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(true);
 
                 CodeAlreadyExists exception = assertThrows(
                         CodeAlreadyExists.class,
@@ -185,7 +185,7 @@ class CreateCupomUseCaseTest {
             @Test
             @DisplayName("Deve lançar CodeAlreadyExists com mensagem apropriada")
             void shouldThrowCodeAlreadyExistsWithAppropriateMessage() {
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(true);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(true);
 
                 CodeAlreadyExists exception = assertThrows(
                         CodeAlreadyExists.class,
@@ -198,7 +198,7 @@ class CreateCupomUseCaseTest {
             @Test
             @DisplayName("Não deve salvar quando código já existe")
             void shouldNotSaveWhenCodeAlreadyExists() {
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(true);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(true);
 
                 assertThrows(
                         CodeAlreadyExists.class,
@@ -216,7 +216,7 @@ class CreateCupomUseCaseTest {
             @Test
             @DisplayName("Deve tratar DataIntegrityViolationException como InvalidCodeException")
             void shouldHandleDataIntegrityViolationAsInvalidCodeException() {
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
                 when(cupomRepository.save(any(Cupom.class)))
                         .thenThrow(new DataIntegrityViolationException("Duplicate entry"));
 
@@ -231,7 +231,7 @@ class CreateCupomUseCaseTest {
             @Test
             @DisplayName("Deve informar que cupom já existe na DataIntegrityViolationException")
             void shouldInformCupomAlreadyExistsOnIntegrityViolation() {
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
                 when(cupomRepository.save(any(Cupom.class)))
                         .thenThrow(new DataIntegrityViolationException("Duplicate entry"));
 
@@ -259,7 +259,7 @@ class CreateCupomUseCaseTest {
                         true
                 );
 
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
                 when(cupomRepository.save(any(Cupom.class))).thenReturn(new Cupom(
                         "ABC123", "Desc", new BigDecimal("10.00"),
                         LocalDateTime.now().plusDays(7), true
@@ -267,7 +267,7 @@ class CreateCupomUseCaseTest {
 
                 createUseCase.execute(requestWithHyphens);
 
-                verify(cupomRepository).existsByCodeWithLock("ABC123");
+                verify(cupomRepository).existsByCode("ABC123");
             }
 
 
@@ -282,7 +282,7 @@ class CreateCupomUseCaseTest {
                         true
                 );
 
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
                 when(cupomRepository.save(any(Cupom.class))).thenReturn(new Cupom(
                         "ABC123", "Desc", new BigDecimal("10.00"),
                         LocalDateTime.now().plusDays(7), true
@@ -290,7 +290,7 @@ class CreateCupomUseCaseTest {
 
                 createUseCase.execute(requestWithSpecialChars);
 
-                verify(cupomRepository).existsByCodeWithLock("ABC123");
+                verify(cupomRepository).existsByCode("ABC123");
             }
         }
 
@@ -328,7 +328,7 @@ class CreateCupomUseCaseTest {
                         true
                 );
 
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
 
                 // Cupom deve lançar exceção para descrição inválida
                 assertThrows(
@@ -348,7 +348,7 @@ class CreateCupomUseCaseTest {
                         true
                 );
 
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
 
                 // Cupom deve lançar exceção para desconto inválidow
                 assertThrows(
@@ -368,7 +368,7 @@ class CreateCupomUseCaseTest {
                         true
                 );
 
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
 
                 // Cupom deve lançar exceção para data inválida
                 assertThrows(
@@ -385,7 +385,7 @@ class CreateCupomUseCaseTest {
             @Test
             @DisplayName("Deve completar criação de forma atômica")
             void shouldCompleteCreationAtomically() {
-                when(cupomRepository.existsByCodeWithLock("ABC123")).thenReturn(false);
+                when(cupomRepository.existsByCode("ABC123")).thenReturn(false);
 
                 Cupom savedCupom = new Cupom(
                         validRequest.code(),
@@ -401,7 +401,7 @@ class CreateCupomUseCaseTest {
                 CupomResponse response = createUseCase.execute(validRequest);
 
                 assertNotNull(response);
-                verify(cupomRepository).existsByCodeWithLock("ABC123");
+                verify(cupomRepository).existsByCode("ABC123");
                 verify(cupomRepository).save(any(Cupom.class));
             }
         }

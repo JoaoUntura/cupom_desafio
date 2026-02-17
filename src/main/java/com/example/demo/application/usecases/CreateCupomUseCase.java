@@ -26,7 +26,7 @@ public class CreateCupomUseCase {
     public CupomResponse execute(CreateCupomDto request){
         String normalizedCode = new CodeCupom(request.code()).getValue();
 
-       boolean exists = this.cupomRepository.existsByCodeWithLock(normalizedCode);
+       boolean exists = this.cupomRepository.existsByCode(normalizedCode);
 
         //Ou exeção genérica se code for sensível
         if(exists){
